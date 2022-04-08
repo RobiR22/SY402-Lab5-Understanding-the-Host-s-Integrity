@@ -4,13 +4,36 @@ It takes strings as file inputs. Examples: a.c    b.js    c.jpg    d.jpeg
 The code
 ////
 import hashlib
+from datetime import datetime
 
 fileDict = {"files":[], "fileHashes":[]}
 
+now = datetime.now()
+dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+histDict = {"Last Update": [], "directories":[]}
+histDict["Last Update"].append(dt_string)
+
+count = 0
+
+def summary():
+    count = 0
+    fileHash = ""
+    history = ""
+    for x in fileDict["files"]:
+        fileHash = fileHash + str(fileDict["files"][count]) + " " + str(fileDict["fileHashes"][count]) + "\n"
+        count = count + 1
+    for x in histDict["directories"]:
+        history = history + str(histDict["Last Update"]) + " " + str(x) + "\n"
+    print("Summary of program.\n" +
+    "Files and their hashes:\n" +
+    fileHash +
+    "History: \n" +
+    history)
+    return()
+
 def hashedDict(file, md5, sha1):
-    fileDict["files"].append([file])
+    fileDict["files"].append(file)
     fileDict["fileHashes"].append([md5, sha1])
-    print(fileDict)
 
 def counter(file):
     count = 0
@@ -46,11 +69,11 @@ def theHasher(file):
         
         #opendedFile.close()
     
-        print("File Name: %s" % file)
-        print("MD5: %r" % md5Hashed)
-        print("SHA1: %r" % sha1Hashed)
+        #print("File Name: %s" % file)
+        #print("MD5: %r" % md5Hashed)
+        #print("SHA1: %r" % sha1Hashed)
         
-        print(file + " hashed is: %s" %md5Hashed)
+        #print(file + " hashed is: %s" %md5Hashed)
         hashedDict(file, md5Hashed, sha1Hashed)
 
     except: 
@@ -66,11 +89,11 @@ def theHasher(file):
         
         #opendedFile.close()
     
-        print("File Name: %s" % file)
-        print("MD5: %r" % md5Hashed)
-        print("SHA1: %r" % sha1Hashed)
+        #print("File Name: %s" % file)
+        #print("MD5: %r" % md5Hashed)
+        #print("SHA1: %r" % sha1Hashed)
         
-        print(file + " hashed is: %s" %md5Hashed)
+        #print(file + " hashed is: %s" %md5Hashed)
         hashedDict(file, md5Hashed, sha1Hashed)
     return(prompter())
 
@@ -78,10 +101,15 @@ def thruDirectory(strDirectory):
     blackList = ["dev", "proc", "run", "sys", "tmp", "lib"]
     if str(strDirectory) in blackList:
         return(prompter())
+    histDict["directories"].append(strDirectory)
     fileFilter(strDirectory)
     return(prompter())
   
 def prompter():
+    global count 
+    count = count + 1
+    if count == 4:
+        return(summary())
     file = str(input("enter file: "))
     thruDirectory(file)
     
