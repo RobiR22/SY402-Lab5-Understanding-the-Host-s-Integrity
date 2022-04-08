@@ -75,6 +75,9 @@ def theHasher(file):
     return(prompter())
 
 def thruDirectory(strDirectory):
+    blackList = ["dev", "proc", "run", "sys", "tmp", "lib"]
+    if str(strDirectory) in blackList:
+        return(prompter())
     fileFilter(strDirectory)
     return(prompter())
   
