@@ -67,10 +67,13 @@ def theHasher(file):
 #function to go thru directory for files and other directories. Print directory send files to foundFile()
 def thruDirectory(strDirectory):
   print(strDirectory)
+  blackList = ["dev", "proc", "run", "sys", "tmp", "lib"]
   directory = os.fsencode(strDirectory)
   for file in os.listdir(directory):
     filename = os.fsdecode(file)
-    if "." in filename: 
+    if str(filename) in blackList:
+        return(prompter())
+    elif "." in filename: 
       fileFilter(filename)
     else:
       thruDirectory(filename)
