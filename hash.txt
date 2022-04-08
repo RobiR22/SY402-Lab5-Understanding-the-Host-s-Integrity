@@ -1,0 +1,87 @@
+This is the original code constructed with https://www.programiz.com/python-programming/online-compiler/
+It takes strings as file inputs. Examples: a.c    b.js    c.jpg    d.jpeg
+
+The code
+////
+import hashlib
+
+fileDict = {"files":[], "fileHashes":[]}
+
+def hashedDict(file, md5, sha1):
+    fileDict["files"].append([file])
+    fileDict["fileHashes"].append([md5, sha1])
+    print(fileDict)
+
+def counter(file):
+    count = 0
+    for char in file:
+        count = count + 1
+    return(count)
+  
+def fileFilter(file):
+    dot = "."
+    count = counter(file)
+    if count >= 3:
+        if file[-2] == dot:
+            theHasher(file)
+        elif file[-3] == dot:
+            theHasher(file)
+        elif file[-4]== dot:
+            theHasher(file)
+        elif file[-5] == dot:
+            theHasher(file)
+        else: print("error")
+
+def theHasher(file):
+    try: 
+        encodeFile = file
+        #openedFile = open(file)
+        #readFile = openedFile.read()
+    
+        md5Hash = hashlib.md5(encodeFile)
+        md5Hashed = md5Hash.hexdigest()
+    
+        sha1Hash = hashlib.sha1(encodeFile)
+        sha1Hashed = sha1Hash.hexdigest()
+        
+        #opendedFile.close()
+    
+        print("File Name: %s" % file)
+        print("MD5: %r" % md5Hashed)
+        print("SHA1: %r" % sha1Hashed)
+        
+        print(file + " hashed is: %s" %md5Hashed)
+        hashedDict(file, md5Hashed, sha1Hashed)
+
+    except: 
+        encodeFile = file.encode()
+        #openedFile = open(file)
+        #readFile = openedFile.read()
+    
+        md5Hash = hashlib.md5(encodeFile)
+        md5Hashed = md5Hash.hexdigest()
+    
+        sha1Hash = hashlib.sha1(encodeFile)
+        sha1Hashed = sha1Hash.hexdigest()
+        
+        #opendedFile.close()
+    
+        print("File Name: %s" % file)
+        print("MD5: %r" % md5Hashed)
+        print("SHA1: %r" % sha1Hashed)
+        
+        print(file + " hashed is: %s" %md5Hashed)
+        hashedDict(file, md5Hashed, sha1Hashed)
+    return(prompter())
+
+def thruDirectory(strDirectory):
+    fileFilter(strDirectory)
+    return(prompter())
+  
+def prompter():
+    file = str(input("enter file: "))
+    thruDirectory(file)
+    
+prompter()
+////
+End code
