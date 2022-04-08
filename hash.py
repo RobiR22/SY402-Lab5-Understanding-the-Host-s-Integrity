@@ -8,11 +8,35 @@
 #imports
 import os
 import hashlib
+from datetime import datetime
 
 fileDict = {"files":[], "fileHashes":[]}
 
+now = datetime.now()
+dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+histDict = {"Last Update": [], "directories":[]}
+histDict["Last Update"].append(dt_string)
+
+count = 0
+
+def summary():
+    count = 0
+    fileHash = ""
+    history = ""
+    for x in fileDict["files"]:
+        fileHash = fileHash + str(fileDict["files"][count]) + " " + str(fileDict["fileHashes"][count]) + "\n"
+        count = count + 1
+    for x in histDict["directories"]:
+        history = history + str(histDict["Last Update"]) + " " + str(x) + "\n"
+    print("Summary of program.\n" +
+    "Files and their hashes:\n" +
+    fileHash +
+    "History: \n" +
+    history)
+    return()
+
 def hashedDict(file, md5, sha1):
-    fileDict["files"].append([file])
+    fileDict["files"].append(file)
     fileDict["fileHashes"].append([md5, sha1])
     print(fileDict)
 
@@ -36,6 +60,7 @@ def fileFilter(file):
         elif strFile[-5] == dot:
             theHasher(file)
         else: print("error")
+    return()
 
 def theHasher(file):
     #encodeFile = file.encode()
@@ -56,29 +81,28 @@ def theHasher(file):
     
     opendedFile.close()
 
-    print("File Name: %s" %file)
-    print("MD5: %r" %md5Hashed)
-    print("SHA1: %r" %sha1Hashed)
+    #print("File Name: %s" %file)
+    #print("MD5: %r" %md5Hashed)
+    #print("SHA1: %r" %sha1Hashed)
     
-    print(file + " hashed is: %s" %md5Hashed)
+    #print(file + " hashed is: %s" %md5Hashed)
     hashedDict(file, md5Hashed, sha1Hashed)
-    return(prompter())  
+    return()  
 
 #function to go thru directory for files and other directories. Print directory send files to foundFile()
 def thruDirectory(strDirectory):
-  print(strDirectory)
   blackList = ["dev", "proc", "run", "sys", "tmp", "lib"]
   directory = os.fsencode(strDirectory)
+  histDict["directories"].append(directory)
   for file in os.listdir(directory):
     filename = os.fsdecode(file)
     if str(filename) in blackList:
-        return(prompter())
+        pass
     elif "." in filename: 
       fileFilter(filename)
     else:
       thruDirectory(filename)
-  print(done)
-  return
+  summary()
 
 def prompter():
     file = str(input("enter file or directory: "))
